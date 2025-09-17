@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
@@ -25,6 +26,13 @@ export default function RulesScreen() {
   useEffect(() => {
     loadRulesData();
   }, []);
+
+  // Refresh rules when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadRulesData();
+    }, [])
+  );
 
   const loadRulesData = async () => {
     try {

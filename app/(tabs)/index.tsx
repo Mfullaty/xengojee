@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { GradientBackground } from '../../components/GradientBackground';
@@ -41,10 +41,25 @@ export default function HomeScreen() {
     };
   }, []);
 
-  const initializeApp = async () => {
+  // Refresh rules when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadRulesData();
+    }, [])
+  );
+
+  const loadRulesData = async () => {
     try {
       const loadedRules = await loadRules();
       setRules(loadedRules);
+    } catch (error) {
+      console.error('Error loading rules:', error);
+    }
+  };
+
+  const initializeApp = async () => {
+    try {
+      await loadRulesData();
       
       const status = await AutomationService.getStatus();
       setIsServiceRunning(status === 'running');
