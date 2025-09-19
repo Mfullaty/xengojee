@@ -122,6 +122,8 @@ The Control tab shows:
 />
 ```
 
+Note: The app no longer declares `BIND_ACCESSIBILITY_SERVICE` as a normal permission in the manifest/app.json. That permission is only used on the service declaration. Start/stop commands are delivered via a broadcast receiver and persisted pending start, so you can toggle automation even if the service isn't yet enabled; it will start automatically once you enable the accessibility service.
+
 ### Key Components
 
 #### XEngojeeService.kt

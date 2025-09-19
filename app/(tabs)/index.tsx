@@ -63,7 +63,15 @@ export default function HomeScreen() {
       
       const status = await AutomationService.getStatus();
       setIsServiceRunning(status === 'running');
-      setServiceStatus(status === 'running' ? 'Service Running' : 'Service Stopped');
+      if (status === 'disabled') {
+        setServiceStatus('Service Disabled');
+      } else if (status === 'running') {
+        setServiceStatus('Service Running');
+      } else if (status === 'connected') {
+        setServiceStatus('Service Connected');
+      } else {
+        setServiceStatus('Service Stopped');
+      }
     } catch (error) {
       console.error('Error initializing app:', error);
       setServiceStatus('Error checking status');
@@ -167,6 +175,7 @@ export default function HomeScreen() {
 
   const getStatusType = (): 'running' | 'stopped' | 'error' | 'warning' => {
     if (serviceStatus.includes('Running')) return 'running';
+    if (serviceStatus.includes('Disabled')) return 'warning';
     if (serviceStatus.includes('Error')) return 'error';
     if (serviceStatus.includes('Checking')) return 'warning';
     return 'stopped';

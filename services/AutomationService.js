@@ -36,6 +36,10 @@ class AutomationService {
     }
   }
 
+  isEnabledStatus(status) {
+    return status && status !== 'disabled';
+  }
+
   async openAccessibilitySettings() {
     try {
       const result = await AutomationModule.openAccessibilitySettings();
